@@ -105,3 +105,6 @@ dist
 
 # Editor
 .nvim/
+
+# output
+out/
