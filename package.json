@@ -3,38 +3,56 @@
   "displayName": "divider",
   "description": "custom divide lines",
   "version": "0.0.1",
+  "publisher": "niuiic",
+  "keywords": [
+    "vscode",
+    "plugin",
+    "divider"
+  ],
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.76.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/niuiic/divider.vs"
+  },
+  "homepage": "https://github.com/niuiic/divider.vs",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "divider.helloWorld",
-        "title": "Hello World"
+    "configuration": {
+      "type": "object",
+      "title": "divider",
+      "properties": {
+        "divider.dividers": {
+          "type": "array",
+          "default": "[]",
+          "description": "config for per level divider"
+        }
       }
-    ]
+    }
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "publish": "pnpm compile && pnpm vsce publish --no-dependencies",
+    "package": "pnpm compile && pnpm vsce package --no-dependencies"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
-    "@types/node": "~16.18.14",
+    "@types/node": "~18.14.6",
     "@types/vscode": "^1.76.0",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
     "@vscode/test-electron": "^2.3.0",
+    "@vscode/vsce": "^2.18.0",
     "eslint": "^8.35.0",
     "glob": "^8.1.0",
     "mocha": "^10.2.0",
