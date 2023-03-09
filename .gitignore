@@ -109,3 +109,4 @@ dist
 
 # output
 out/
+*.vsix
