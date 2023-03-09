@@ -30,12 +30,29 @@
       "type": "object",
       "title": "divider",
       "properties": {
-        "divider.dividers": {
+        "divider.divider": {
           "type": "array",
-          "default": "[]",
+          "default": [],
           "description": "config for per level divider"
         }
       }
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "divider",
+          "title": "divider",
+          "icon": "icon.png"
+        }
+      ]
+    },
+    "views": {
+      "divider": [
+        {
+          "id": "divider",
+          "name": "divider"
+        }
+      ]
     }
   },
   "scripts": {
