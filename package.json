@@ -2,7 +2,7 @@
   "name": "divide-line",
   "displayName": "divider",
   "description": "custom divide lines",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "publisher": "niuiic",
   "keywords": [
     "vscode",
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/niuiic/divider.vs",
   "activationEvents": [
-    "onView:nodeDependencies"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
