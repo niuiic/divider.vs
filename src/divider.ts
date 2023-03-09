@@ -1,9 +1,30 @@
 import * as vscode from 'vscode'
 import { config } from './config'
-import { TreeNode, updateTreeData } from './sidebar'
+import { TreeNode, TreeDataProvider } from './sidebar'
 import { Divider } from './type'
 
-const highlightDivider = (_dividers: Divider[]) => {}
+const decorationTypes: vscode.TextEditorDecorationType[] = []
+
+const highlightDivider = (dividers: Divider[]) => {
+  // clear prev highlights
+  decorationTypes.forEach((v) => {
+    v.dispose()
+  })
+  decorationTypes.length = 0
+
+  dividers.forEach((v) => {
+    const decorationType = vscode.window.createTextEditorDecorationType({
+      isWholeLine: true,
+      color: v.color
+    })
+    decorationTypes.push(decorationType)
+    vscode.window.activeTextEditor?.setDecorations(decorationType, [
+      {
+        range: new vscode.Range(new vscode.Position(v.line - 1, 1), new vscode.Position(v.line - 1, 1))
+      }
+    ])
+  })
+}
 
 const buildDividerTree = (dividers: Divider[]): TreeNode => {
   const rootNode = new TreeNode({
@@ -31,6 +52,7 @@ const buildDividerTree = (dividers: Divider[]): TreeNode => {
         const prevNode = nodes[i]
         if (prevNode.level === node.level - 1) {
           prevNode.children.push(node)
+          prevNode.collapsibleState = 2
           break
         }
       }
@@ -57,12 +79,13 @@ const genDivider = (line: string, lineNum: number): Divider | undefined => {
 }
 
 export const resolveDivider = () => {
-  for (const textDocument of vscode.workspace.textDocuments) {
-    const text = textDocument.getText()
-    const lines = text.split('\n')
-    const dividers = lines.map((line, index) => genDivider(line, index)).filter((v) => v !== undefined) as Divider[]
-    highlightDivider(dividers)
-    const tree = buildDividerTree(dividers)
-    updateTreeData((root) => (root.children = tree.children))
+  if (vscode.workspace.textDocuments.length === 0) {
+    return
   }
+  const text = vscode.workspace.textDocuments[0].getText()
+  const lines = text.split('\n')
+  const dividers = lines.map((line, index) => genDivider(line, index + 1)).filter((v) => v !== undefined) as Divider[]
+  highlightDivider(dividers)
+  const tree = buildDividerTree(dividers)
+  TreeDataProvider.updateTreeData(tree)
 }

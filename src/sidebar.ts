@@ -10,24 +10,34 @@ export class TreeNode extends vscode.TreeItem {
     this.line = args.line
     this.level = args.level
     this.children = []
+    this.command = {
+      command: 'cursorToLine',
+      title: 'move to divider',
+      arguments: [args.line]
+    }
   }
 }
 
-const treeData = new TreeNode({ line: -1, label: '', level: 0 })
-
-export const updateTreeData = (updateFunc: (root: TreeNode) => void) => {
-  updateFunc(treeData)
-}
-
 export class TreeDataProvider implements vscode.TreeDataProvider<TreeNode> {
+  private static treeData = new TreeNode({ line: -1, label: '', level: 0 })
+  public static updateTreeData = (root: TreeNode) => {
+    TreeDataProvider.treeData.children = root.children
+  }
+
   getTreeItem(element: TreeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
     return element
   }
   getChildren(element?: TreeNode | undefined): vscode.ProviderResult<TreeNode[]> {
     if (!element) {
-      return treeData.children
+      return TreeDataProvider.treeData.children
     } else {
       return element.children
     }
+  }
+
+  private onDidChangeTreeDataEmitter = new vscode.EventEmitter<void>()
+  onDidChangeTreeData = this.onDidChangeTreeDataEmitter.event
+  refresh() {
+    this.onDidChangeTreeDataEmitter.fire()
   }
 }

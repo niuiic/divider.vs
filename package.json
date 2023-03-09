@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/niuiic/divider.vs",
   "activationEvents": [
-    "onStartupFinished"
+    "onView:nodeDependencies"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -53,7 +53,13 @@
           "name": "divider"
         }
       ]
-    }
+    },
+    "commands": [
+      {
+        "command": "cursorToLine",
+        "title": "move cursor to line"
+      }
+    ]
   },
   "scripts": {
     "compile": "tsc -p ./",
