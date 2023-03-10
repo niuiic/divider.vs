@@ -22,7 +22,7 @@ export const activate = (context: vscode.ExtensionContext) => {
   }
   context.subscriptions.push(
     vscode.workspace.onDidSaveTextDocument(refreshDividers),
-    vscode.workspace.onDidOpenTextDocument(refreshDividers)
+    vscode.window.onDidChangeActiveTextEditor(refreshDividers)
   )
 }
 

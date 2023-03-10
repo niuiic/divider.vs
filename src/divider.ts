@@ -79,10 +79,10 @@ const genDivider = (line: string, lineNum: number): Divider | undefined => {
 }
 
 export const resolveDivider = () => {
-  if (vscode.workspace.textDocuments.length === 0) {
+  if (!vscode.window.activeTextEditor) {
     return
   }
-  const text = vscode.workspace.textDocuments[0].getText()
+  const text = vscode.window.activeTextEditor.document.getText()
   const lines = text.split('\n')
   const dividers = lines.map((line, index) => genDivider(line, index + 1)).filter((v) => v !== undefined) as Divider[]
   highlightDivider(dividers)
