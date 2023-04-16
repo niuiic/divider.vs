@@ -2,6 +2,8 @@ import * as vscode from 'vscode'
 import { config } from './config'
 import { TreeNode, TreeDataProvider } from './sidebar'
 import { Divider } from './type'
+import { getCursorPos } from './cursor'
+import { Static } from './static'
 
 const decorationTypes: vscode.TextEditorDecorationType[] = []
 
@@ -85,7 +87,42 @@ export const resolveDivider = () => {
   const text = vscode.window.activeTextEditor.document.getText()
   const lines = text.split('\n')
   const dividers = lines.map((line, index) => genDivider(line, index + 1)).filter((v) => v !== undefined) as Divider[]
+  Static.dividers = dividers
   highlightDivider(dividers)
   const tree = buildDividerTree(dividers)
   TreeDataProvider.updateTreeData(tree)
+}
+
+const inRange = (line: number, range: [number, number]) => line >= range[0] && (line < range[1] || range[1] === -1)
+
+export const updateCurDivider = (): boolean => {
+  const cursorPos = getCursorPos()
+  if (!cursorPos) {
+    return false
+  }
+
+  if (inRange(cursorPos.row, Static.curDivider.range)) {
+    return false
+  }
+
+  let targetIndex = 0
+  const dividers = Static.dividers.filter((v) => v.list)
+  for (const divider of dividers) {
+    if (cursorPos.row < divider.line) {
+      break
+    }
+    targetIndex++
+  }
+  targetIndex = targetIndex - 1
+  if (targetIndex === dividers.length) {
+    return false
+  }
+
+  Static.curDivider.line = dividers[targetIndex].line
+  Static.curDivider.range = [
+    dividers[targetIndex].line,
+    dividers.length >= targetIndex + 2 ? dividers[targetIndex + 1].line : -1
+  ]
+
+  return true
 }

@@ -2,7 +2,7 @@
   "name": "divide-line",
   "displayName": "divider",
   "description": "custom divide lines",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "niuiic",
   "keywords": [
     "vscode",
@@ -34,6 +34,15 @@
           "type": "array",
           "default": [],
           "description": "config for per level divider"
+        },
+        "divider.markCurrentDivider": {
+          "type": "boolean",
+          "default": true,
+          "description": "whether to mark current divider on divider panel"
+        },
+        "divider.iconPath": {
+          "type": "string",
+          "description": "path to icon"
         }
       }
     },

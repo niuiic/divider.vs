@@ -1,4 +1,6 @@
 import * as vscode from 'vscode'
+import { Static } from './static'
+import { config } from './config'
 
 export class TreeNode extends vscode.TreeItem {
   public line: number
@@ -25,7 +27,10 @@ export class TreeDataProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   getTreeItem(element: TreeNode): vscode.TreeItem | Thenable<vscode.TreeItem> {
-    return element
+    return {
+      ...element,
+      iconPath: Static.curDivider.line === element.line ? config.iconPath() : undefined
+    }
   }
   getChildren(element?: TreeNode | undefined): vscode.ProviderResult<TreeNode[]> {
     if (!element) {

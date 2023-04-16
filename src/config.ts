@@ -3,6 +3,8 @@ import { DividerConfig } from './type'
 
 interface Config {
   divider: DividerConfig[]
+  iconPath: string
+  markCurrentDivider: boolean
 }
 
 type ConfigFunc = {
@@ -10,5 +12,7 @@ type ConfigFunc = {
 }
 
 export const config: ConfigFunc = {
-  divider: () => workspace.getConfiguration().get('divider.divider') as DividerConfig[]
+  divider: () => workspace.getConfiguration().get('divider.divider') as DividerConfig[],
+  iconPath: () => workspace.getConfiguration().get('divider.iconPath') as string,
+  markCurrentDivider: () => workspace.getConfiguration().get('divider.markCurrentDivider') as boolean
 }
